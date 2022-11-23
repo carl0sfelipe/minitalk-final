@@ -1,34 +1,38 @@
-NAMEONE = client \
+NAME	= minitalk
 
-NAMETWO = server \
+SERVER	= server
 
-SRCSONE = client.c \
-		  
-SRCSTWO = server.c \
+CLIENT	= client
 
 CC		= cc
 
-RM		= rm -f
+LIBFTPRINTF	= ft_printf/libftprintf.a
 
-CFLAGS = -Wall -Wextra -Werror
+RM		= rm -rf
 
+CFLAGS	= -Wall -Wextra -Werror
 
-all:	
-		make -C ./ft_printf
-		mv ./ft_printf/libftprintf.a .
-		cc $(CFLAGS) $(SRCSONE) libftprintf.a -o $(NAMEONE)
-		cc $(CFLAGS) $(SRCSTWO) libftprintf.a -o $(NAMETWO)
+$(NAME):	server client
+
+${SERVER}:	${LIBFT} server.c
+			${CC} ${CFLAGS} server.c -o server ft_printf/libftprintf.a
+
+${CLIENT}:	${LIBFT} client.c
+			${CC} ${CFLAGS} client.c -o client ft_printf/libftprintf.a
+
+${LIBFT}:
+			make -C ./ft_printf/
+
+bonus:		${SERVERB} ${CLIENTB}
+
+all:		$(NAME)
 
 clean:
-		${RM} ${NAMEONE} ${NAMETWO}
-		${RM} libftprintf.a
-		make -C ./ft_printf clean
+			${RM} ${SERVER} ${CLIENT} ${SERVERB} ${CLIENTB}
+			cd ft_printf && make clean
 
-fclean:
-		make clean
-		make -C ./ft_printf fclean
+fclean:		clean
 
-re: 
-		make -C ./ft_printf re
+re:			fclean all
 
-.PHONY: all clean
+.PHONY:		all clean fclean re
