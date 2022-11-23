@@ -12,24 +12,20 @@ RM		= rm -rf
 
 CFLAGS	= -Wall -Wextra -Werror
 
-$(NAME):	server client
+$(NAME):	all
 
-${SERVER}:	${LIBFT} server.c
-			${CC} ${CFLAGS} server.c -o server ft_printf/libftprintf.a
+all:		${SERVER} ${CLIENT}
 
-${CLIENT}:	${LIBFT} client.c
-			${CC} ${CFLAGS} client.c -o client ft_printf/libftprintf.a
+${SERVER}:	
+			make -C ./ft_printf
+			${CC} ${CFLAGS} server.c ft_printf/libftprintf.a -o server 
 
-${LIBFT}:
-			make -C ./ft_printf/
-
-bonus:		${SERVERB} ${CLIENTB}
-
-all:		$(NAME)
+${CLIENT}:	
+			${CC} ${CFLAGS} client.c ft_printf/libftprintf.a -o client
 
 clean:
 			${RM} ${SERVER} ${CLIENT} ${SERVERB} ${CLIENTB}
-			cd ft_printf && make clean
+			cd ft_printf && make fclean
 
 fclean:		clean
 
